@@ -3,7 +3,7 @@ import { sortUsersByLastLogin } from './sortUsers.js';
 let usersData = [];
 
 async function fetchAndRenderUsers() {
-  const response = await fetch('http://localhost:3001/api/users');
+  const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/users');
   let users = await response.json();
   usersData = users; 
 
@@ -114,7 +114,7 @@ document.getElementById('deleteAllBtn').addEventListener('click', async () => {
 
   try {
     for (const user of selectedUsers) {
-      await fetch(`http://localhost:3001/api/users/${user.id}`, { method: 'DELETE' });
+      await fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}`, { method: 'DELETE' });
     }
     await fetchAndRenderUsers();
     showMessage('Success', `${selectedUsers.length} user(s) deleted successfully.`, 'success');
@@ -140,7 +140,7 @@ document.getElementById('blockAllBtn').addEventListener('click', async () => {
 
   try {
     for (const user of selectedUsers) {
-      await fetch(`http://localhost:3001/api/users/${user.id}/block`, { method: 'PATCH' });
+      await fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}/block`, { method: 'PATCH' });
     }
     await fetchAndRenderUsers();
     showMessage('Success', `${selectedUsers.length} user(s) blocked successfully.`, 'success');
@@ -180,7 +180,7 @@ document.getElementById('unblockAllBtn').addEventListener('click', async () => {
 async function performUnblock(users) {
   try {
     for (const user of users) {
-      await fetch(`http://localhost:3001/api/users/${user.id}/unblock`, { method: 'PATCH' });
+      await fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}/unblock`, { method: 'PATCH' });
     }
     await fetchAndRenderUsers();
     showMessage('Success', `${users.length} user(s) unblocked successfully.`, 'success');
