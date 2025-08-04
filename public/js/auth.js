@@ -13,25 +13,28 @@ async function handleSignIn() {
     }
     
     try {
-        const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/auth/login', {
+        const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/auth/login', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
         });
-        
+
         const result = await response.json();
-        
-        if (response.ok) {
-            window.location.href = 'dashboard.html';
-        } else {
-            showMessage('Login Failed', result.message || 'Login failed.', 'error');
-        }
+
+    if (response.ok) {
+        localStorage.setItem('token', result.token);
+
+        window.location.href = 'dashboard.html';
+    } else {
+        showMessage('Login Failed', result.message || 'Login failed.', 'error');
+    }
     } catch (error) {
         console.error('Login error:', error);
         showMessage('Error', 'An error occurred during login.', 'error');
     }
+
 }
 
 async function handleSignUp() {
@@ -79,11 +82,18 @@ async function handleSignUp() {
 
 async function handleLogout() {
     try {
-        const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/auth/logout', {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch('https://site_url/api/auth/logout', { 
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`, // 🔐 Send token
+            },
         });
-        
+
         if (response.ok) {
+            localStorage.removeItem('token');
+
             window.location.href = 'index.html';
         } else {
             const result = await response.json();
