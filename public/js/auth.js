@@ -13,7 +13,7 @@ async function handleSignIn() {
     }
     
     try {
-        const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/auth/login', { 
+        const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/login', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ async function handleLogout() {
         const response = await fetch('https://site_url/api/auth/logout', { 
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`, // 🔐 Send token
+                'Authorization': `Bearer ${token}`, 
             },
         });
 
