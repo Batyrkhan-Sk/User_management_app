@@ -3,9 +3,28 @@ import { sortUsersByLastLogin } from './sortUsers.js';
 let usersData = [];
 
 async function fetchAndRenderUsers() {
-  const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/users');
+  const token = localStorage.getItem('token');
+
+  const response = await fetch('https://user-management-backend-3n4t.onrender.com/api/users', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    console.error('Fetch error:', response.status, error);
+    return;
+  }
+
   let users = await response.json();
-  usersData = users; 
+
+  if (!Array.isArray(users)) {
+    console.error('Expected array, got:', users);
+    return;
+  }
+
+  usersData = users;
 
   const allBlocked = users.length > 0 && users.every(user => user.status === 'blocked');
   if (allBlocked) {
