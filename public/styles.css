@@ -14,7 +14,7 @@ body {
 }
 
 .right-box {
-    background: url('../assets/login_img.jpg') no-repeat center center;
+    background: url('../public/assets/login_img.jpg') no-repeat center center;
     background-size: cover;
 }
 
