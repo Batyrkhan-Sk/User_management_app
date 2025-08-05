@@ -199,10 +199,17 @@ document.getElementById('unblockAllBtn').addEventListener('click', async () => {
 async function performUnblock(users) {
   const currentUserInList = users.find(user => user.alreadyBlocked);
   if (currentUserInList) {
-    showMessage('Warning', 'You cannot unblock yourself. Contact admin please.', 'warning');
+    showMessage('Warning', 'You cannot unblock yourself. Contact support please.', 'warning');
     return;
   }
-  
+
+  const blockedUsers = users.filter(user => user.status === 'blocked');
+  if (blockedUsers.length > 0) {
+    const names = blockedUsers.map(user => user.name).join(', ');
+    showMessage('Blocked Users', `Cannot unblock the following users because they are blocked: ${names}`, 'error');
+    return;
+  }
+
   try {
     const unblockPromises = users.map(user => 
       fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}/unblock`, { 

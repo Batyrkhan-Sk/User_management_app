@@ -28,7 +28,7 @@ async function handleSignIn() {
 
         window.location.href = 'dashboard.html';
     } else {
-        showMessage('Login Failed', result.message || 'Login failed.', 'error');
+        showMessage('Login Failed', result.message || 'Login failed. Please contact User Management administrator', 'error');
     }
     } catch (error) {
         console.error('Login error:', error);
