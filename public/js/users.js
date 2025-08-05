@@ -197,13 +197,33 @@ document.getElementById('unblockAllBtn').addEventListener('click', async () => {
 
 
 async function performUnblock(users) {
+  const currentUserInList = users.find(user => user.alreadyBlocked);
+  if (currentUserInList) {
+    showMessage('Warning', 'You cannot unblock yourself. Contact admin please.', 'warning');
+    return;
+  }
+  
   try {
-    for (const user of users) {
-      await fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}/unblock`, { method: 'PATCH' });
+    const unblockPromises = users.map(user => 
+      fetch(`https://user-management-backend-3n4t.onrender.com/api/users/${user.id}/unblock`, { 
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+    );
+    
+    const responses = await Promise.all(unblockPromises);
+    
+    const failedRequests = responses.filter(response => !response.ok);
+    if (failedRequests.length > 0) {
+      throw new Error(`${failedRequests.length} request(s) failed`);
     }
+    
     await fetchAndRenderUsers();
     showMessage('Success', `${users.length} user(s) unblocked successfully.`, 'success');
   } catch (error) {
+    console.error('Unblock error:', error);
     showMessage('Error', 'Failed to unblock users. Please try again.', 'error');
   }
 }
